@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Request time</th>
+            <th scope="col">IP Address</th>
+            <th scope="col">Refferer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for field in statistic %}
+        <tr>
+            <th scope="row">{{ field.request_time }}</th>
+            <th scope="row">{{ field.ip_address }}</th>
+            <th scope="row">{{ field.refferer }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

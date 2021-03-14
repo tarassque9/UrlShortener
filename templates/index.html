@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block content %}
+<center><br>
+    <form action="{% url 'core:main' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">URL:</label> {{ form.url }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Url</th>
+                <th scope="col">Detail</th>
+                <th scope="col">Short Url</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for url in urls %}
+            <tr>
+                <th scope="row">{{ url.url }}</th>
+                <th scope="row"><button type="button" onclick="location.href='{% url 'core:detail' url.id %}';" class="btn btn-info">detail</button></th>
+                <th scope="row"><a href="{% url 'core:redirect' url.slug %}">{{ host }}{{ url.slug }}</a></th>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</center>
+{% endblock %}
