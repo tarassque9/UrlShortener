@@ -21,13 +21,19 @@ class DetailView(View):
 class MainView(View):
     template_name = 'index.html'
     
+    def gen_slug(self):
+        return ''.join(random.choice(string.ascii_letters)
+                           for x in range(10))
+    
     def get(self, request):
         form = UrlForm()
         urls = UrlData.objects.all()
         host = 'http://127.0.0.1:8000/'
-        context = {'urls': urls,
-                   'form': form,
-                   'host': host}
+        context = {
+            'urls': urls,
+            'form': form,
+            'host': host
+            }
         return render(request, self.template_name, context)
     
     def post(self, request):
@@ -36,16 +42,15 @@ class MainView(View):
             url = form.cleaned_data["url"]
             try:
                 obj = UrlData.objects.get(url=url)
-                return redirect('/main')
+                return redirect('core:main')
             except ObjectDoesNotExist:
-                slug = ''.join(random.choice(string.ascii_letters)
-                           for x in range(10))
+                slug = self.gen_slug()
                 new_url = UrlData(url=url, slug=slug)
                 new_url.save()
-                return redirect('/main')
+                return redirect('core:main')
         else:
             messages.add_message(request, messages.INFO, 'Form is not valid. Please enter valid URL')
-            return redirect('/main')
+            return redirect('core:main')
 
 def urlRedirect(request, slug):
     ip_address = request.META.get('REMOTE_ADDR')
